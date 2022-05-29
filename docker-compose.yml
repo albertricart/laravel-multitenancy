@@ -1,0 +1,133 @@
+version: '3'
+
+networks:
+  laravel:
+
+services:
+  site:
+    build:
+      context: ./dockerfiles
+      dockerfile: nginx.dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    container_name: ${PROJECT_NAME}_nginx
+    ports:
+      - 80:80
+    volumes:
+      - ./src:/var/www/html:delegated
+    depends_on:
+      - php
+      - mysql
+      - phpmyadmin
+    networks:
+      - laravel
+
+  mysql:
+    image: mariadb:10.6
+    container_name: ${PROJECT_NAME}_mysql
+    restart: unless-stopped
+    tty: true
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: btoolin
+      MYSQL_USER: btoolin
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - laravel
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: ${PROJECT_NAME}_phpmyadmin
+    links:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8081:80
+    networks:
+      - laravel
+
+  php:
+    build:
+      context: ./dockerfiles
+      dockerfile: php.dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+        - XDEBUG='${XDEBUG:-true}'
+        - XDEBUG_PORT='${XDEBUG_PORT:-9003}'
+    container_name: ${PROJECT_NAME}_php
+    volumes:
+      - ./src:/var/www/html:delegated
+      - ./php.ini:/usr/local/etc/php/conf.d/custom.ini
+    networks:
+      - laravel
+
+  composer:
+    build:
+      context: ./dockerfiles
+      dockerfile: composer.dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    container_name: ${PROJECT_NAME}_composer
+    volumes:
+      - ./src:/var/www/html
+    working_dir: /var/www/html
+    depends_on:
+      - php
+    user: laravel
+    entrypoint: ['composer', '--ignore-platform-reqs']
+    networks:
+      - laravel
+
+  npm:
+    image: node:16.14.2
+    container_name: ${PROJECT_NAME}_npm
+    volumes:
+      - ./src:/var/www/html
+    ports:
+      - 3000:3000
+      - 3001:3001
+    working_dir: /var/www/html
+    entrypoint: ['npm']
+    networks:
+      - laravel
+
+  artisan:
+    build:
+      context: ./dockerfiles
+      dockerfile: php.dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    user: ${UID:-1000}:${GID:-1000}
+    container_name: ${PROJECT_NAME}_artisan
+    volumes:
+      - ./src:/var/www/html:delegated
+    depends_on:
+      - mysql
+    working_dir: /var/www/html
+    entrypoint: ['php', '/var/www/html/artisan']
+    networks:
+      - laravel
+
+  phploy:
+    build:
+      context: ./dockerfiles
+      dockerfile: phploy.dockerfile
+    container_name: ${PROJECT_NAME}_phploy
+    volumes:
+      - ./:/var/www/html
+    working_dir: /var/www/html
+    entrypoint: ['phploy']
+    networks:
+      - laravel

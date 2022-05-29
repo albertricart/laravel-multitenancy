@@ -20,12 +20,7 @@ RUN sed -i "s/user = www-data/user = laravel/g" /usr/local/etc/php-fpm.d/www.con
 RUN sed -i "s/group = www-data/group = laravel/g" /usr/local/etc/php-fpm.d/www.conf
 RUN echo "php_admin_flag[log_errors] = on" >> /usr/local/etc/php-fpm.d/www.conf
 
-# Required for laravel intervention image
-RUN apk add libpng-dev \
-    && apk add libjpeg-turbo-dev
-
-RUN docker-php-ext-configure gd --with-jpeg
-RUN docker-php-ext-install pdo pdo_mysql gd
+RUN docker-php-ext-install pdo pdo_mysql
 
 ARG XDEBUG
 ARG XDEBUG_PORT

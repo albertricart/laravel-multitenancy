@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "name": "Listen for Xdebug",
+            "type": "php",
+            "request": "launch",
+            "port": 9003,
+            "hostname": "localhost",
+            "pathMappings": {
+                "/var/www/html": "${workspaceRoot}/src"
+            }
+        }
+    ]
+}

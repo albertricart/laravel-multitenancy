@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,5 +22,7 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
+
+Route::get('/teams/change/{hash}', [TeamController::class, 'change_current_team'])->name('changeTeam')->middleware('auth');
 
 require __DIR__.'/auth.php';

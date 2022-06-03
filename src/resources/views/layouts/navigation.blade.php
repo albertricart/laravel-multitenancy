@@ -38,6 +38,12 @@
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
 
+                            @foreach (auth()->user()->teams as $team)
+                                <x-dropdown-link :href="route('changeTeam', $team->hash)">
+                                    <span class="{{ $team->id == auth()->user()->active_team_id ? 'font-bold' : '' }}">{{ $team->name }}</span>
+                                </x-dropdown-link>
+                            @endforeach
+
                             <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">

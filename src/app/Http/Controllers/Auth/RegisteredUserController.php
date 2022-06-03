@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Team;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -47,7 +48,16 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
+        $team = Team::create([
+            'name' => $user->name . ' Team',
+            'hash' => hash('md5', $user->name),
+        ]);
+
+        $user->teams()->attach($team->id);
+
         Auth::login($user);
+
+        $user->update(['active_team_id' => $team->id]);
 
         return redirect(RouteServiceProvider::HOME);
     }

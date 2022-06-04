@@ -19,10 +19,19 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::middleware('auth')->group(function() {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 
-Route::get('/teams/change/{hash}', [TeamController::class, 'change_current_team'])->name('changeTeam')->middleware('auth');
+    Route::get('/teams/change/{hash}', [TeamController::class, 'change_current_team'])->name('changeTeam');
+
+    Route::controller(TaskController::class)->group(function() {
+        Route::get('/tasks/create', 'create')->name('tasks.create');
+        Route::post('/tasks/store', 'store')->name('tasks.store');
+    });
+});
+
+
 
 require __DIR__.'/auth.php';

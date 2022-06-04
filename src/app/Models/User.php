@@ -62,4 +62,14 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Team::class, 'active_team_id');
     }
+
+    /**
+     * Get all of the tasks for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
 }

@@ -17,18 +17,6 @@ class StoreTaskRequest extends FormRequest
     }
 
     /**
-     * Prepare the data for validation.
-     *
-     * @return void
-     */
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            'user_id' => auth()->id(),
-        ]);
-    }
-
-    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, mixed>
@@ -38,7 +26,6 @@ class StoreTaskRequest extends FormRequest
         return [
             'name' => 'required',
             'description' => 'nullable',
-            'user_id' => 'required|exists:users,id'
         ];
     }
 }

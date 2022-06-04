@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\FilterByTeam as FilterByTeam;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
 {
-    use HasFactory;
+    use HasFactory, FilterByTeam;
 
     protected $table = 'tasks';
 
@@ -25,5 +27,5 @@ class Task extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
+    }   
 }

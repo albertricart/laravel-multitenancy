@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 
 class TeamController extends Controller
 {
-    public function change_current_team($hash){
-        $team = auth()->user()->teams()->where('hash', $hash)->firstOrFail();
+    public function change_current_team($token){
+        $team = auth()->user()->teams()->where('token', $token)->firstOrFail();
 
         auth()->user()->update(['active_team_id' => $team->id]);
 

@@ -10,6 +10,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 
 class RegisteredUserController extends Controller
@@ -50,7 +51,7 @@ class RegisteredUserController extends Controller
 
         $team = Team::create([
             'name' => $user->name . ' Team',
-            'hash' => hash('md5', $user->name),
+            'token' => Str::random(32),
         ]);
 
         $user->teams()->attach($team->id);

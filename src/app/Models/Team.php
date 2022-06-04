@@ -11,7 +11,7 @@ class Team extends Model
 
     protected $table = 'teams';
 
-    protected $fillable = ['name', 'hash'];
+    protected $fillable = ['name', 'token'];
 
     /**
      * The users that belong to the Team

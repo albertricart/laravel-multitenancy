@@ -5080,7 +5080,26 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 window.Alpine = alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"];
+alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].magic('clipboard', function () {
+  return function (subject) {
+    navigator.clipboard.writeText(subject);
+  };
+});
+alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].magic('now', function () {
+  return new Date().toLocaleTimeString();
+});
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].start();
+console.log(alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"]); // Alpine.magic('clipboard', () => subject => {
+// 	alert();
+// 	navigator.permissions.query({name: "clipboard-write"}).then(result => {
+// 		if (result.state == "granted" || result.state == "prompt") {
+// 			/* write to the clipboard now */
+// 			navigator.clipboard.writeText(subject);
+// 		}else {
+// 			alert("Couldn't write to clipboard")
+// 		}
+// 	});
+// })
 
 /***/ }),
 

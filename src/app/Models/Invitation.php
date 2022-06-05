@@ -29,15 +29,9 @@ class Invitation extends Model
     protected static function boot() {
         parent::boot();
 
-        $currentTeamId = auth()->user()->active_team_id;
-
-        self::creating(function ($model) use ($currentTeamId) {
-            $model->team_id = $currentTeamId;
+        self::creating(function ($model) {
+            $model->team_id = auth()->user()->active_team_id;
             $model->token = Str::random(40);
-        });
-
-        self::addGlobalScope(function(Builder $builder) use ($currentTeamId) {
-            $builder->where('team_id', $currentTeamId);
         });
     }
 
@@ -48,7 +42,7 @@ class Invitation extends Model
      */
     public function sender()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
@@ -58,6 +52,6 @@ class Invitation extends Model
      */
     public function team()
     {
-        return $this->belongsTo(Team::class);
+        return $this->belongsTo(Team::class, 'team_id');
     }
 }

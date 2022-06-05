@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Traits\FilterByTeam as FilterByTeam;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -27,5 +26,15 @@ class Task extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-    }   
+    }
+
+    /**
+     * Get the team that owns the Task
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function team()
+    {
+        return $this->belongsTo(Team::class, 'team_id');
+    }
 }

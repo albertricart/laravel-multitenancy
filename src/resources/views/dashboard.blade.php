@@ -31,7 +31,7 @@
 											</tr>
 									</thead>
 									<tbody>
-										@foreach (auth()->user()->tasks as $task)
+										@foreach (auth()->user()->active_team->tasks as $task)
 										<tr class="bg-white border-b -800 hover:bg-gray-50">
 												<th scope="row" class="px-6 py-4 font-medium text-gray-900  whitespace-nowrap">
 														{{ $task->name }}
